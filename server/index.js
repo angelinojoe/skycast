@@ -13,7 +13,7 @@ const app = express();
 
 app.use(require('volleyball'));
 
-module.exports = app
+module.exports = app;
   // Body parsing middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

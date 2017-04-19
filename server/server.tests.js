@@ -3,7 +3,7 @@ var mocha = require('mocha');
 var request = require('supertest-as-promised');
 var expect = chai.expect();
 var app = require('./index.js');
-var agent = request.agent(app)
+var agent = request.agent(app);
 
 describe('Search', function() {
   var artist = {
@@ -23,7 +23,7 @@ describe('Search', function() {
   };
 
 
-  describe('GET artists', function() {
+  describe('GET forecast', function() {
     it('returns all artists from spotify API', function() {
       // remember to use search query api, not the regular artist pull. need id of artist first.
       agent
