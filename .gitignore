@@ -1,2 +1,5 @@
-node_modules
-bundle.js
+node_modules/*
+public/bundle.js
+public/bundle.js.map
+npm-debug.log
+secret*

@@ -29,7 +29,7 @@ router.get('/:address', (req, res, next) => {
         next(err);
       } else {
         //attach address to forecast obj
-        forecastObj["address"] = address;
+        forecastObj.address = address;
         res.json(forecastObj);
       }
     })

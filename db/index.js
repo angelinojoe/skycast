@@ -1,11 +1,9 @@
 'use strict';
 
-var db = require('./db.js');
+var db = require('./_db');
+var Query = require('./models/queries');
+var User = require('./models/users');
 
-//import models, example:
-//var User = require('./models/users');
-
-//set associations, example:
-//User.belongsToMany(Song, {through: 'UserFavSongs'});
+User.hasMany(Query);
 
 module.exports = db;

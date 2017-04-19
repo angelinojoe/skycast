@@ -1,66 +1,86 @@
-const express = require('express');
-const morgan = require('morgan');
-const path = require('path');
-const bodyParser = require('body-parser');
-const app = express();
-const db = require('../db');
-const User = db.models.user;
+'use strict';
+
 const session = require('express-session');
+const passport = require('passport');
+const express = require('express');
+const bodyParser = require('body-parser');
+const {resolve} = require('path');
+const finalHandler = require('finalhandler');
+const db = require('../db');
 
 
-//middlewares
-app.use(morgan('dev'));
-express.static(path.join(__dirname, '../public'));
-app.use(bodyParser.json());
+const app = express();
+
+app.use(require('volleyball'));
+
+module.exports = app
+  // Body parsing middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-//session middleware
+// Authentication middleware
+
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'a wildly insecure secret',
+  secret: 'string',
   resave: false,
   saveUninitialized: false
 }));
 
-//initialize passport
-const passport = require('passport');
+app.use('/numVisits', function(req, res, next){
+  var sess = req.session;
+  if (sess.number === undefined) {
+    sess.number = 0;
+  } else {
+    sess.number++;
+  }
+  res.status(200).send(sess);
+});
+
+app.use('/', (req, res, next) => {
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-//serialize/deserialize user
 passport.serializeUser((user, done) => {
-  try {
-    done(null, user.id);
-  } catch (err) {
-    done(err);
-  }
-});
+  done(null, user.id);
+  });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id)
-    .then(user => done(null, user))
-    .catch(done);
+  done(null, id);
 });
 
-app.use('/api', require('./apiRoutes'));
+
+// Serve static files from ../public
+app.use(express.static(resolve(__dirname, '..', 'public')));
+
+// Serve our api - ./api also requires in ../db, which syncs with our database
+app.use('/api', require('./api.js'));
 
 // Send index.html for anything else.
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
-});
+app.get('/*', (_, res) => res.sendFile(resolve(__dirname, '..', 'public', 'index.html')));
 
-//handle 500 errors
-app.use(function (err, req, res, next) {
+
+app.use((err, req, res, next) => {
   console.error(err);
-  console.error(err.stack);
-  res.status(err.status || 500).send(err.message || 'Internal server error.');
+  finalHandler(req, res)(err);
 });
 
-//start server
-app.listen(3000, function () {
-  console.log('Your server, listening on port 3000');
-  db.sync({force: true})
-    .then(function () {
-      console.log('The postgres server is connected');
-    });
-});
+if (module === require.main) {
+
+  const server = app.listen(
+    process.env.PORT || 1337,
+    () => {
+      console.log(`--- Started HTTP Server ---`);
+      const { address, port } = server.address();
+      const host = address === '::' ? 'localhost' : address;
+      const urlSafeHost = host.includes(':') ? `[${host}]` : host;
+      console.log(`Listening on http://${urlSafeHost}:${port}`);
+      db.sync({force: true})
+      .then(function () {
+        console.log('The postgres server is connected');
+      });
+    }
+  );
+}

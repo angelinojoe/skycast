@@ -1,5 +1,7 @@
-function dummyReducer (state = {}, action) {
-  return state;
-}
+import { combineReducers } from 'redux';
 
-export default dummyReducer;
+
+const rootReducer = combineReducers({
+});
+
+export default rootReducer;
