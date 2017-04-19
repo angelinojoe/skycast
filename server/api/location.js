@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const info = require('../../secret.config');
 const pRequest = require('request-promise');
+const Promise = require('bluebird');
 
 router.get('/:address', (req, res, next) => {
   pRequest({
@@ -18,7 +19,7 @@ router.get('/:address', (req, res, next) => {
       const address = locationObj.results[0].formatted_address;
       const location = locationObj.results[0].geometry.location;
       pRequest({
-        url: `https://api.darksky.net/forecast/${info.darkSkySecret}/${location.lat},${location.lng}?exclude=minutely,flags`,
+        url: `https://api.darksky.net/forecast/${info.darkSkySecret}/${location.lat},${location.lng}?exclude=minutely,hourly,flags`,
         method: 'GET',
         json: true
       })
@@ -30,9 +31,33 @@ router.get('/:address', (req, res, next) => {
       } else {
         //attach address to forecast obj
         forecastObj.address = address;
-        res.json(forecastObj);
-      }
-    })
+        //use time from forecastObj, get time for each day of last weekArray
+        //use bluebird promise.all to call API for each day of last week
+        const lastWeek = (forecastObj.currently.time - 604800);
+        let weekArray = [lastWeek];
+        for (var i = 0;i < 6;i++){
+          weekArray.push(weekArray[i] + 86400);
+        }
+        Promise.map(weekArray, function(day) {
+        // Promise.map awaits for returned promises
+          return pRequest({
+            url: `https://api.darksky.net/forecast/${info.darkSkySecret}/${location.lat},${location.lng},${day}?exclude=currently,minutely,hourly,flags`,
+            method: 'GET',
+            json: true
+          });
+        }).then((weekObj) => {
+          if (!weekObj){
+            const err = new Error('does not exist');
+            err.status = 404;
+            next(err);
+          }
+          else {
+            forecastObj.past = weekObj;
+            res.json(forecastObj);
+          }
+        })
+      .catch(next);
+    }})
     .catch(next);
     }
   })

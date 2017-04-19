@@ -30,7 +30,7 @@ export default class HomePage extends Component {
       {this.props.currentForecast.address ?
       <div id="locLabel" className="container">
         <h2>{this.props.currentForecast.address}</h2>
-        <div><Past forecast={this.props.currentForecast.currently} /></div>
+        <div><Past forecast={this.props.currentForecast.past} /></div>
         <div><Present forecast={this.props.currentForecast.currently} /></div>
         <div><Future forecast={this.props.currentForecast.daily} /></div>
       </div>
