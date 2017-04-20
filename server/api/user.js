@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const db = require('../../db');
 const User = db.models.user;
+const Query = db.models.query;
 
 router.post('/login', (req, res, next) => {
   User.findOne({
@@ -10,7 +11,7 @@ router.post('/login', (req, res, next) => {
   })
     .then(user => {
       if (!user) {res.status(401).send('User not found');}
-      else if (!user.hasMatchingPassword(req.body.password)){ res.status(401).send('Incorrect password');}
+      else if (!user.correctPassword(req.body.password)){ res.status(401).send('Incorrect password');}
       else {
         req.login(user, err => {
           if (err) next(err);
@@ -39,6 +40,19 @@ router.post('/logout', (req, res, next) => {
 
 router.get('/me', (req, res, next) => {
   res.json(req.user);
+});
+
+router.post('/query', (req, res, next) => {
+  //each time a user submits a search, post it in the db
+  Query.create({
+    location: req.body.location
+  })
+  .then((query) => {
+    query.setUser(req.user);
+  })
+  .then((updatedQuery) => {
+    res.json(updatedQuery);
+  });
 });
 
 //handles routes that dont exist with a 404 error

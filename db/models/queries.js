@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../_db');
 
 var Query = db.define('query', {
-  details: {
+  location: {
     type: Sequelize.TEXT
   }
 });
