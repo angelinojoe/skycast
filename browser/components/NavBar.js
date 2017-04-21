@@ -13,7 +13,8 @@ return (
         <ul className="nav navbar-nav">
           <li className="active"><a href="#">Weather <span className="sr-only">(current)</span></a></li>
         </ul>
-        {props.isUserLoggedIn === 'false' ?
+        <p className="navbar-text"><a href="https://darksky.net">Powered By Dark Sky</a></p>
+        {props.userQueries.isLoggedIn === 'false' ?
         <ul className="nav navbar-nav navbar-right">
           <li><Link to={'/login'}><button type="submit" className="btn btn-default">Sign In/Up</button></Link></li>
         </ul>

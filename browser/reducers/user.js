@@ -3,7 +3,7 @@ import axios from 'axios';
 export const SET_TO_TRUE = 'SET_TO_TRUE';
 export const SET_TO_FALSE = 'SET_TO_FALSE';
 
-export const setTrue = () => ({ type: SET_TO_TRUE});
+export const setTrue = (queries) => ({ type: SET_TO_TRUE, receivedQueries: queries});
 export const setFalse = () => ({ type: SET_TO_FALSE});
 
 export const logInUser = (type, email, password) => {
@@ -15,7 +15,11 @@ export const logInUser = (type, email, password) => {
         })
         .then((res) => {
           if (res.status === 200){
-            dispatch(setTrue());
+            axios.get('/api/user/queries')
+            .then((response) => response.data)
+            .then((queries) => {
+              dispatch(setTrue(queries));
+            });
           }
         })
         .catch(function (err) {
@@ -38,15 +42,19 @@ export const logOutUser = () => {
   };
 };
 
-const userReducer = (state = 'false', action) => {
-  console.log(action);
+const userReducer = (state = {isLoggedIn: 'false', queries: []}, action) => {
+  let newState = Object.assign({}, state);
   switch (action.type) {
 
     case SET_TO_TRUE:
-      return 'true';
+      newState.isLoggedIn = 'true';
+      newState.queries = action.receivedQueries;
+      return newState;
 
     case SET_TO_FALSE:
-      return 'false';
+      newState.isLoggedIn = 'false';
+      newState.queries = [];
+      return newState;
 
     default:
       return state;

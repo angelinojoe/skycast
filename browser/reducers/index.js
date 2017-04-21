@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux';
 import forecastReducer from './forecast';
-import queriesReducer from './queries';
 import userReducer from './user';
 
 const rootReducer = combineReducers({
   currentForecast: forecastReducer,
-  usersQueries: queriesReducer,
-  isUserLoggedIn: userReducer
+  userQueries: userReducer
 });
 
 export default rootReducer;

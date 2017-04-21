@@ -4,7 +4,7 @@ import logOutUser from '../reducers/user';
 
 const mapStateToProps = (state) => {
   return {
-    isUserLoggedIn: state.isUserLoggedIn
+    userQueries: state.userQueries
   };
 };
 
