@@ -50,8 +50,8 @@ router.post('/query', (req, res, next) => {
   .then((query) => {
     query.setUser(req.user);
   })
-  .then((updatedQuery) => {
-    res.json(updatedQuery);
+  .then(() => {
+    res.sendStatus(200);
   });
 });
 

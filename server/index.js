@@ -26,16 +26,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-app.use('/numVisits', function(req, res, next){
-  var sess = req.session;
-  if (sess.number === undefined) {
-    sess.number = 0;
-  } else {
-    sess.number++;
-  }
-  res.status(200).send(sess);
-});
-
 app.use('/', (req, res, next) => {
   next();
 });

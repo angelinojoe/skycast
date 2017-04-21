@@ -12,10 +12,6 @@ var Queries = require('./models/queries');
 before('wait for the db', () => db.didSync);
 
 describe('user model', () => {
-	it('has the expected schema definition', () => {
-		expect(User.attributes.email).to.be.an('string');
-		expect(User.attributes.password).to.be.an('string');
-	});
 	it('can create a user', () => {
       User.create({email: 'aa@aol.com', password: 'secretPass123'})
       .then(newUser => expect(newUser.email).to.equal('aa@aol.com'));
@@ -37,16 +33,6 @@ describe('user model', () => {
 });
 
 describe('Queries model', () => {
-	it('has the expected schema definition', () => {
-		expect(Queries.attributes.location).to.be.an('string');
-	});
-	it('query must be not null', () => {
-      let query = Queries.build({location: ''});
-      return query.validate()
-      .then(result => {
-        expect(result).to.be.an.instanceOf(Error);
-      });
-    });
 	it('query should be given a corresponding user_id', () => {
 		Queries.create({location: "New york"})
 		.then((query) => {

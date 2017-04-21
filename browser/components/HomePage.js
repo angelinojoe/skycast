@@ -26,6 +26,7 @@ export default class HomePage extends Component {
   }
 
   saveQuery(){
+    //only save if a user is logged in
     if (this.props.userQueries.isLoggedIn){
       const loc = document.getElementById('location').value;
       axios.post('/api/user/query', {
