@@ -33,7 +33,7 @@ router.post('/signup', (req, res, next) => {
     .catch(next);
 });
 
-router.post('/logout', (req, res, next) => {
+router.get('/logout', (req, res, next) => {
   req.logout();
   res.sendStatus(200);
 });
@@ -52,6 +52,24 @@ router.post('/query', (req, res, next) => {
   })
   .then((updatedQuery) => {
     res.json(updatedQuery);
+  });
+});
+
+router.get('/queries', (req, res, next) => {
+  Query.findAll({
+    where: {
+      user_id: req.user
+    }
+  })
+  .then((queries) => {
+    if (!queries){
+      const err = new Error('does not exist');
+      err.status = 404;
+      next(err);
+    }
+    else {
+      res.json(queries);
+    }
   });
 });
 

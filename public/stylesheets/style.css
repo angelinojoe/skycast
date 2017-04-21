@@ -21,3 +21,17 @@
 .panel-body{
   background-color: rgba(66, 134, 244, .3);
 }
+
+#login{
+  margin-left: 20px;;
+}
+
+.loginInputs {
+  margin-top: 10px;
+}
+#signin, #signup{
+  margin-top: 15px;
+}
+#signin{
+  margin-left: 15px;
+}

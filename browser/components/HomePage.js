@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import NavBar from './NavBar';
+import NavBarContainer from '../containers/NavBarContainer';
 import Past from './Past';
 import Present from './Present';
 import Future from './Future';
@@ -20,7 +20,7 @@ export default class HomePage extends Component {
   render () {
     return (
     <div>
-    <NavBar />
+    <NavBarContainer />
       <div id="searchBar" className="container input-group">
         <form onSubmit={this.onLocationSubmit}>
           <input id="location" type="text" className="form-control" placeholder="Search by State, City, or Address..." />

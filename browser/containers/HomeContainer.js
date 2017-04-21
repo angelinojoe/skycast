@@ -4,7 +4,9 @@ import {fetchForecast} from '../reducers/forecast';
 
 const mapStateToProps = (state) => {
   return {
-    currentForecast: state.currentForecast
+    currentForecast: state.currentForecast,
+    usersQueries: state.usersQueries,
+    isUserLoggedIn: state.isUserLoggedIn
   };
 };
 

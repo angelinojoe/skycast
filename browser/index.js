@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import store from './store';
 
 import HomeContainer from './containers/HomeContainer';
+import LoginContainer from './containers/LoginContainer';
 import {clearForecast} from './reducers/forecast';
 
 const resetForecast = () => {
@@ -17,6 +18,7 @@ render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" onEnter={resetForecast} component={HomeContainer} />
+      <Route path="/login" component={LoginContainer} />
     </Router>
   </Provider>,
   document.getElementById('app')
