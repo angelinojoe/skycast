@@ -1,6 +1,6 @@
 import NavBar from '../components/NavBar';
 import { connect } from 'react-redux';
-import logOutUser from '../reducers/user';
+import {setFalse} from '../reducers/user';
 
 const mapStateToProps = (state) => {
   return {
@@ -10,8 +10,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logOutUser: function(){
-      dispatch(logOutUser());
+    setFalse: function(){
+      dispatch(setFalse());
     }
   };
 };

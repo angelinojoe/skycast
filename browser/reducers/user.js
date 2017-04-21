@@ -29,6 +29,7 @@ export const logInUser = (type, email, password) => {
 };
 
 export const logOutUser = () => {
+  console.log('in logout');
   return (dispatch) => {
     axios.get('/api/user/logout')
     .then((res) => {

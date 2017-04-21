@@ -1,7 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router';
+import axios from 'axios';
 
 export default function NavBar (props) {
+var logout = function(){
+  axios.get('/api/user/logout')
+  .then(() => {
+    props.setFalse();
+  });
+};
 
 return (
   <nav className="navbar navbar-default">
@@ -20,7 +27,7 @@ return (
         </ul>
         :
         <ul className="nav navbar-nav navbar-right">
-          <li><button type="submit" className="btn btn-default" onClick={() => props.logOutUser()}>Log Out</button></li>
+          <li><button type="submit" className="btn btn-default" onClick={logout}>Log Out</button></li>
         </ul>
         }
     </div>

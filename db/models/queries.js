@@ -3,7 +3,8 @@ const db = require('../_db');
 
 var Query = db.define('query', {
   location: {
-    type: Sequelize.TEXT
+    type: Sequelize.TEXT,
+    allowNull: false
   }
 });
 
