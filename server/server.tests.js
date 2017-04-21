@@ -80,7 +80,7 @@ describe('User', function() {
       .then(() => {
         agent
         .post('/api/user/query')
-        .send({location: 'New%York'})
+        .send({location: 'New York'})
         .expect(200)
         .then(() => {
           agent.get('/api/user/queries')
